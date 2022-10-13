@@ -28,9 +28,25 @@ before_script:
   - sbt sbtVersion
 
 test:
+  cache:
+    key:
+      files:
+        - build.sbt
+    paths:
+      - "sbt-cache/ivy/cache"
+      - "sbt-cache/coursier"
   script:
     # Execute your project's tests
-    - sbt clean test
+    - sbt clean coverage scalafmtCheck scalafmtSbtCheck test coverageReport coverageAggregate
+  artifacts:
+    paths:
+      - "target/scala-*/scapegoat-report"
+      - "target/scala-*/scoverage-report"
+      - "target/it-reports/*.xml"
+    reports:
+      junit:
+        - target/**/TEST-*.xml
+    expire_in: "2 hours"
 
 deploy:
   stage: deploy
