@@ -9,15 +9,18 @@ class HelloWorldSpec extends CatsEffectSuite {
   private val databaseConfig = DatabaseConfig("host", 1, "username", "password")
 
   test("HelloWorld returns status code 200") {
-    assertIO(retHelloWorld.map(_.status) ,Status.Ok)
+    assertIO(retHelloWorld.map(_.status), Status.Ok)
   }
 
   test("HelloWorld returns hello world message") {
-    assertIO(retHelloWorld.flatMap(_.as[String]), s"{\"message\":\"Hello, world, with data base information $databaseConfig! Don't do this\"}")
+    assertIO(
+      retHelloWorld.flatMap(_.as[String]),
+      s"{\"message\":\"Hello, world, with data base information $databaseConfig! Don't do this\"}"
+    )
   }
 
   private[this] val retHelloWorld: IO[Response[IO]] = {
-    val getHW = Request[IO](Method.GET, uri"/hello/world")
+    val getHW      = Request[IO](Method.GET, uri"/hello/world")
     val helloWorld = HelloWorld.impl[IO](databaseConfig)
     HellokindRoutes.helloWorldRoutes(helloWorld).orNotFound(getHW)
   }
