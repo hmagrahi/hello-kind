@@ -1,8 +1,10 @@
 image:
   repository: nginx
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
   tag: ""
+
+vault: dev/kind/authentication
+
 database:
   host: "localhost"
   port: 8091

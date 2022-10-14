@@ -11,22 +11,22 @@
 # https://hub.docker.com/_/openjdk/ . A Java image is not required
 # but an image with a JVM speeds up the build a bit.
 image: openjdk:8
+before_script:
+  # Enable the usage of sources over https
+  - apt-get update -yqq
+  - apt-get install apt-transport-https -yqq
+  # Add keyserver for SBT
+  - echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
+  - mkdir -p /root/.gnupg
+  - gpg --recv-keys --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --keyserver hkp://keyserver.ubuntu.com:80 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+  - chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg
+  # Install SBT
+  - apt-get update -yqq
+  - apt-get install sbt -yqq
+  # Log the sbt version
+  - sbt sbtVersion
 
 test:
-  before_script:
-    # Enable the usage of sources over https
-    - apt-get update -yqq
-    - apt-get install apt-transport-https -yqq
-    # Add keyserver for SBT
-    - echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
-    - mkdir -p /root/.gnupg
-    - gpg --recv-keys --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --keyserver hkp://keyserver.ubuntu.com:80 2EE0EA64E40A89B84B2DF73499E82A75642AC823
-    - chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg
-    # Install SBT
-    - apt-get update -yqq
-    - apt-get install sbt -yqq
-    # Log the sbt version
-    - sbt sbtVersion
   cache:
     key:
       files:
@@ -47,14 +47,32 @@ test:
         - target/**/TEST-*.xml
     expire_in: "2 hours"
 
-e2e-test:
-  image: dtzar/helm-kubectl
+helm-test:
+  services:
+    - docker:19.03.13-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+
   before_script:
-    - curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.16.0/kind-linux-amd64
+    -  curl -fsSL https://get.docker.com -o get-docker.sh
+    -  sh get-docker.sh
+    - curl -LO https://dl.k8s.io/release/v1.25.0/bin/linux/amd64/kubectl
+    - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    - chmod +x kubectl
+    - mkdir -p ~/.local/bin
+    - mv ./kubectl ~/.local/bin/kubectl
+    - curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.16.0/kind-linux-amd64 --insecure
     - chmod +x ./kind
-    - ./kind version
+    - mv ./kind /usr/local/bin/kind
+    - kind version
+    - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    - chmod 700 get_helm.sh
+    - ./get_helm.sh
   script:
+    - docker version
     - helm version
+    - chmod +x scripts/mock-cluster.sh
+    - ./scripts/mock-cluster.sh
 
 deploy:
   stage: deploy
