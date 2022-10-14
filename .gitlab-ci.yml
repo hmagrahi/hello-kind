@@ -69,8 +69,12 @@ helm-test:
     - chmod 700 get_helm.sh
     - ./get_helm.sh
   script:
-    - docker version
-    - helm version
+    - kind create cluster --name kind --wait 180s
+    - export KUBECONFIG=~/.kube/config
+    - apt -y install iproute2
+    - export REAL_IP=$(ip route|awk '/default/ { print $3 }')
+    - echo $REAL_IP
+    - sed -i -e "s/localhost/$REAL_IP/g" $KUBECONFIG
     - chmod +x scripts/mock-cluster.sh
     - ./scripts/mock-cluster.sh
 

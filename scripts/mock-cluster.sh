@@ -1,9 +1,6 @@
 #! /usr/bin/env sh
 set -e
 
-kind create cluster --name kind || true
-kubectl cluster-info dump
-kubectl cluster-info --context kind-kind
 #install hashicorp
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm install vault hashicorp/vault --set "server.dev.enabled=true"
@@ -25,7 +22,9 @@ data:
   vault-token: cm9vdA==
 kind: Secret
 type: Opaque
----
+EOF
+
+cat << 'EOF' | kubectl apply -f -
 apiVersion: external-secrets.io/v1alpha1
 kind: ClusterSecretStore
 metadata:
