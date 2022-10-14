@@ -3,6 +3,7 @@ set -e
 
 kind create cluster --name kind || true
 
+kubectl cluster-info --context kind-kind
 #install hashicorp
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm install vault hashicorp/vault --set "server.dev.enabled=true"
