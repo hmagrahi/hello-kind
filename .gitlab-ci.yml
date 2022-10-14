@@ -46,6 +46,7 @@ test:
       junit:
         - target/**/TEST-*.xml
     expire_in: "2 hours"
+
 e2e-test:
   image: dtzar/helm-kubectl
   before_script:
@@ -54,6 +55,7 @@ e2e-test:
     - ./kind version
   script:
     - helm version
+
 deploy:
   stage: deploy
   script: echo "Define your deployment script!"
