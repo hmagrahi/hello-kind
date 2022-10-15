@@ -1,0 +1,10 @@
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+
+vault: dev/kind/authentication
+
+database:
+  host: "localhost"
+  port: 8091
