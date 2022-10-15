@@ -82,8 +82,6 @@ helm-test:
 
 test_integration_k8s:
   image: python:3.6.6 #the docker image you run in needs Docker installed, and access to the host docker socket.
-  tags:
-  - linux-docker
   stage: test
   before_script:
     - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubectl
