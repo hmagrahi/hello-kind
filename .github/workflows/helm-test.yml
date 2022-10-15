@@ -1,0 +1,22 @@
+name: Helm test
+on:
+  push:
+    branches:
+
+jobs:
+  helm-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Kubernetes
+        uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: v0.11.1
+      - name: Setup Helm
+        uses: ./.github/actions/helm
+      - name: Build service image
+        run: |
+          sbt "docker:publishLocal"
+      - name: Deploy service
+        run: ./scripts/mock-cluster.sh

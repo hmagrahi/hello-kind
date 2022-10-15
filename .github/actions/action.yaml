@@ -1,0 +1,25 @@
+name: Setup Helm CLI
+description: A GitHub Action for running Helm commands
+branding:
+  color: blue
+  icon: command
+inputs:
+  version:
+    description: "Helm version"
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: "Download helm binary to tmp"
+      shell: bash
+      run: |
+        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+        chmod 700 get_helm.sh
+    - name: "Install helm"
+      shell: bash
+      run: |
+        ./get_helm.sh
+    - name: "Verify correct installation of binary"
+      shell: bash
+      run: |
+        helm version
