@@ -70,40 +70,8 @@ helm-test:
     - ./get_helm.sh
   script:
     - kind create cluster --name kind --wait 180s
-    - kind get kubeconfig --name kind
-    - export KUBECONFIG=~/.kube/config
-    - apt -y install iproute2
-    - export REAL_IP=$(ip route|awk '/default/ { print $3 }')
-    - echo $REAL_IP
-    - sed -i -e "s/127.0.0.1/$REAL_IP/g" $KUBECONFIG
-    - cat $KUBECONFIG
     - docker ps
-    - kind get kubeconfig --name kind
+    - kubectl cluster-info
     - kubectl cluster-info --context kind-kind
-    - chmod +x scripts/mock-cluster.sh
-    - ./scripts/mock-cluster.sh
-
-test_integration_k8s:
-  image: python:3.6.6 #the docker image you run in needs Docker installed, and access to the host docker socket.
-  tags:
-  - linux-docker
-  stage: test
-  before_script:
-    - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubectl
-    - chmod +x kubectl
-    - mv kubectl /usr/local/bin/
-    - curl -Lo kind https://github.com/kubernetes-sigs/kind/releases/download/0.1.0/kind-linux-amd64
-    - chmod +x kind
-    - mv kind /usr/local/bin/
-    - kind create cluster --name $CI_PIPELINE_ID --wait 180s
-    - export KUBECONFIG="$(kind get kubeconfig-path --name $CI_PIPELINE_ID)"
-    - REAL_IP=$(ip route|awk '/default/ { print $3 }')
-    - sed -i -e "s/localhost/$REAL_IP/g" $KUBECONFIG
-  script:
-    - kubectl get nodes --insecure-skip-tls-verify=true
-  after_script:
-    - kind delete cluster --name $CI_PIPELINE_ID
-deploy:
-  stage: deploy
-  script: echo "Define your deployment script!"
-  environment: production
+#    - chmod +x scripts/mock-cluster.sh
+#    - ./scripts/mock-cluster.sh
