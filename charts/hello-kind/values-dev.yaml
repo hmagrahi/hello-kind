@@ -6,5 +6,5 @@ image:
 vault: dev/kind/authentication
 
 database:
-  host: "localhost"
+  host: localhost
   port: 8091
