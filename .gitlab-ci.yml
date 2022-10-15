@@ -70,6 +70,7 @@ helm-test:
     - ./get_helm.sh
   script:
     - kind create cluster --name kind --wait 180s
+    - kind get kubeconfig --name kind
     - export KUBECONFIG=~/.kube/config
     - apt -y install iproute2
     - export REAL_IP=$(ip route|awk '/default/ { print $3 }')
