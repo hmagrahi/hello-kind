@@ -76,7 +76,9 @@ helm-test:
     - export REAL_IP=$(ip route|awk '/default/ { print $3 }')
     - echo $REAL_IP
     - sed -i -e "s/127.0.0.1/$REAL_IP/g" $KUBECONFIG
+    - cat $KUBECONFIG
     - kind get kubeconfig --name kind
+    - kubectl cluster-info --context kind-kind
     - chmod +x scripts/mock-cluster.sh
     - ./scripts/mock-cluster.sh
 
