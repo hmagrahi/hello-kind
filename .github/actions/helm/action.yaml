@@ -3,10 +3,6 @@ description: A GitHub Action for running Helm commands
 branding:
   color: blue
   icon: command
-inputs:
-  version:
-    description: "Helm version"
-    required: true
 runs:
   using: composite
   steps:

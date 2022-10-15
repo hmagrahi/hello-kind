@@ -10,7 +10,7 @@ lazy val root = (project in file("."))
   .settings(
     organization := "com.example",
     name         := "hello-kind",
-    version      := "0.0.1-SNAPSHOT",
+    version      := (git.gitHeadCommit.value map { sha => s"v$sha" }).getOrElse("init"),
     scalaVersion := "2.13.8",
     libraryDependencies ++= Seq(
       "org.http4s"            %% "http4s-ember-server"    % Http4sVersion,
@@ -29,4 +29,4 @@ lazy val root = (project in file("."))
     addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
     testFrameworks += new TestFramework("munit.Framework")
   )
-  .enablePlugins(DockerPlugin, JavaServerAppPackaging)
+  .enablePlugins(DockerPlugin, JavaServerAppPackaging, GitVersioning)

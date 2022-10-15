@@ -40,15 +40,15 @@ spec:
                 name: {{ include "hello-kind.fullname" . }}-configmap
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /health/liveness
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /health/readiness
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
