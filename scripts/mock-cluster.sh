@@ -41,3 +41,9 @@ spec:
           namespace: "default"
           key: "vault-token"
 EOF
+
+# install podinfo with tls enabled
+helm upgrade --install hello-kind ./charts/hello-kind \
+    --set image.repository=hello-kind \
+    --set image.tag=latest \
+    --namespace=default
