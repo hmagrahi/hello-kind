@@ -1,11 +1,11 @@
-val Http4sVersion          = "1.0.0-M37"
-val CirceVersion           = "0.14.2"
+val Http4sVersion          = "1.0.0-M35"
+val CirceVersion           = "0.14.3"
 val MunitVersion           = "0.7.29"
 val LogbackVersion         = "1.2.11"
 val MunitCatsEffectVersion = "1.0.7"
 val PureconfigVersion      = "0.17.1"
 
-ThisBuild / scapegoatVersion := "1.4.15"
+ThisBuild / scapegoatVersion := "1.4.17"
 lazy val root = (project in file("."))
   .settings(
     organization := "com.example",
