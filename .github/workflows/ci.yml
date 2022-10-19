@@ -2,9 +2,7 @@ name: Continuous Integration (CI)
 
 on:
   push:
-    branches: [ "feature/*" , "fix/*", "doc/*", "ci/*" ]
-  pull_request:
-    branches: [ "feature/*" , "fix/*", "doc/*", "ci/*" ]
+    branches:
 
 permissions:
   contents: read
