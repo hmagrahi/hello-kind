@@ -11,7 +11,7 @@ lazy val root = (project in file("."))
     organization := "com.example",
     name         := "hello-kind",
     version      := (git.gitHeadCommit.value map { sha => s"v$sha" }).getOrElse("init"),
-    scalaVersion := "2.13.8",
+    scalaVersion := "2.13.11",
     libraryDependencies ++= Seq(
       "org.http4s"            %% "http4s-ember-server"    % Http4sVersion,
       "org.http4s"            %% "http4s-ember-client"    % Http4sVersion,
