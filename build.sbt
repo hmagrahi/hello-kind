@@ -25,7 +25,7 @@ lazy val root = (project in file("."))
       "com.github.pureconfig" %% "pureconfig"             % PureconfigVersion,
       "com.github.pureconfig" %% "pureconfig-cats-effect" % PureconfigVersion
     ),
-    addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.2" cross CrossVersion.full),
+    addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.3" cross CrossVersion.full),
     addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
     testFrameworks += new TestFramework("munit.Framework")
   )
